@@ -4,11 +4,13 @@ paths: "plugins/**/*"
 
 # Claude Code Plugin Maintenance Guide
 
-When creating or modifying plugin configuration files, follow these context-optimization principles.
+When creating or modifying plugin configuration files, follow these
+context-optimization principles.
 
 ## Configuration Selection Framework
 
-Choose configuration type based on **when context should load** and **how context should be shared**:
+Choose configuration type based on **when context should load** and **how
+context should be shared**:
 
 | Type        | Trigger      | Context Isolation | Startup Loading                |
 | ----------- | ------------ | ----------------- | ------------------------------ |
@@ -20,9 +22,11 @@ Choose configuration type based on **when context should load** and **how contex
 ## Anti-Patterns to Avoid
 
 1. **Context bloat**: Move task-specific procedures to slash commands
-2. **Duplicated content**: If skill and command overlap, have skill invoke the command
+2. **Duplicated content**: If skill and command overlap, have skill invoke the
+   command
 3. **Shared rules in multiple agents**: Extract to skill (conditional)
-4. **Heavyweight tasks in main context**: Use agent when trial-and-error would pollute context
+4. **Heavyweight tasks in main context**: Use agent when trial-and-error would
+   pollute context
 
 ## Best Practices
 
@@ -66,6 +70,7 @@ Use `/example:command` slash command to do X.
 ```
 
 Benefits:
+
 - Auto-triggers when Claude detects intent
 - Allows explicit command for manual control
 - Eliminates duplication

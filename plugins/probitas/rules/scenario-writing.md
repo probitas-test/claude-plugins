@@ -16,14 +16,17 @@ export default scenario("Name", { tags: ["..."] })
 
 ## Split vs Single Scenario
 
-**Split into array** for independent tests (parallel execution, better failure identification):
+**Split into array** for independent tests (parallel execution, better failure
+identification):
 
 ```typescript
 export default [
   scenario("Validation - rejects empty name", { tags: ["validation"] })
     .resource("http", () => client.http.createHttpClient({ url: "..." }))
     .step("Test", async (ctx) => {
-      const res = await ctx.resources.http.post("/users", { body: { name: "" } });
+      const res = await ctx.resources.http.post("/users", {
+        body: { name: "" },
+      });
       expect(res).toHaveStatus(400);
     })
     .build(),
@@ -31,7 +34,9 @@ export default [
   scenario("Validation - rejects invalid email", { tags: ["validation"] })
     .resource("http", () => client.http.createHttpClient({ url: "..." }))
     .step("Test", async (ctx) => {
-      const res = await ctx.resources.http.post("/users", { body: { email: "bad" } });
+      const res = await ctx.resources.http.post("/users", {
+        body: { email: "bad" },
+      });
       expect(res).toHaveStatus(400);
     })
     .build(),
@@ -44,7 +49,9 @@ export default [
 export default scenario("User CRUD workflow", { tags: ["crud"] })
   .resource("http", () => client.http.createHttpClient({ url: "..." }))
   .step("Create", async (ctx) => {
-    const res = await ctx.resources.http.post("/users", { body: { name: "Alice" } });
+    const res = await ctx.resources.http.post("/users", {
+      body: { name: "Alice" },
+    });
     return res.json<{ id: number }>()!;
   })
   .step("Get", async (ctx) => {
@@ -70,12 +77,12 @@ export default scenario("Test").step(() => {}).build();
 
 ```typescript
 // BAD: Hardcoded URL
-client.http.createHttpClient({ url: "http://localhost:8080" })
+client.http.createHttpClient({ url: "http://localhost:8080" });
 
 // GOOD: Use environment variable with fallback
 client.http.createHttpClient({
   url: Deno.env.get("API_URL") ?? "http://localhost:8080",
-})
+});
 ```
 
 ```typescript

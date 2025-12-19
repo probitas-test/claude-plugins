@@ -28,21 +28,27 @@ import { client, expect, scenario } from "jsr:@probitas/probitas";
 
 export default [
   scenario("Validation - empty name", { tags: ["validation"] })
-    .resource("http", () => client.http.createHttpClient({
-      url: Deno.env.get("API_URL") ?? "http://localhost:8080",
-    }))
+    .resource("http", () =>
+      client.http.createHttpClient({
+        url: Deno.env.get("API_URL") ?? "http://localhost:8080",
+      }))
     .step("Test", async (ctx) => {
-      const res = await ctx.resources.http.post("/users", { body: { name: "" } });
+      const res = await ctx.resources.http.post("/users", {
+        body: { name: "" },
+      });
       expect(res).toHaveStatus(400);
     })
     .build(),
 
   scenario("Validation - invalid email", { tags: ["validation"] })
-    .resource("http", () => client.http.createHttpClient({
-      url: Deno.env.get("API_URL") ?? "http://localhost:8080",
-    }))
+    .resource("http", () =>
+      client.http.createHttpClient({
+        url: Deno.env.get("API_URL") ?? "http://localhost:8080",
+      }))
     .step("Test", async (ctx) => {
-      const res = await ctx.resources.http.post("/users", { body: { email: "bad" } });
+      const res = await ctx.resources.http.post("/users", {
+        body: { email: "bad" },
+      });
       expect(res).toHaveStatus(400);
     })
     .build(),
@@ -53,11 +59,14 @@ export default [
 
 ```typescript
 export default scenario("CRUD workflow", { tags: ["crud"] })
-  .resource("http", () => client.http.createHttpClient({
-    url: Deno.env.get("API_URL") ?? "http://localhost:8080",
-  }))
+  .resource("http", () =>
+    client.http.createHttpClient({
+      url: Deno.env.get("API_URL") ?? "http://localhost:8080",
+    }))
   .step("Create", async (ctx) => {
-    const res = await ctx.resources.http.post("/users", { body: { name: "Alice" } });
+    const res = await ctx.resources.http.post("/users", {
+      body: { name: "Alice" },
+    });
     return res.json<{ id: number }>()!;
   })
   .step("Get", async (ctx) => {

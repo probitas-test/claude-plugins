@@ -1,11 +1,12 @@
 # jsr-probitas Claude Plugins
 
-Official Claude Code plugin marketplace for [Probitas](https://jsr-probitas.github.io/documents/) ecosystem.
+Official Claude Code plugin marketplace for
+[Probitas](https://jsr-probitas.github.io/documents/) ecosystem.
 
 ## Available Plugins
 
-| Plugin | Description |
-|--------|-------------|
+| Plugin                         | Description                            |
+| ------------------------------ | -------------------------------------- |
 | [probitas](./plugins/probitas) | Scenario testing framework integration |
 
 ## Installation

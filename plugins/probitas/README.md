@@ -1,12 +1,14 @@
 # Probitas Plugin for Claude Code
 
-Integration plugin for [Probitas](https://jsr-probitas.github.io/documents/) scenario testing framework.
+Integration plugin for [Probitas](https://jsr-probitas.github.io/documents/)
+scenario testing framework.
 
 ## Features
 
 ### Rules
 
-- **conventions** - File structure, naming, and coding conventions (always applied)
+- **conventions** - File structure, naming, and coding conventions (always
+  applied)
 
 ### Skills
 
@@ -14,16 +16,17 @@ Integration plugin for [Probitas](https://jsr-probitas.github.io/documents/) sce
 
 ### Commands
 
-| Command | Description |
-|---------|-------------|
-| `/probitas:init` | Initialize a Probitas project |
-| `/probitas:run [selector]` | Run scenarios |
-| `/probitas:new <type>` | Generate scenario template |
-| `/probitas:check` | Run syntax check |
+| Command                    | Description                   |
+| -------------------------- | ----------------------------- |
+| `/probitas:init`           | Initialize a Probitas project |
+| `/probitas:run [selector]` | Run scenarios                 |
+| `/probitas:new <type>`     | Generate scenario template    |
+| `/probitas:check`          | Run syntax check              |
 
 ### Agents
 
-- **scenario-writer** - Specialized agent for creating integration test scenarios
+- **scenario-writer** - Specialized agent for creating integration test
+  scenarios
 
 ## Installation
 

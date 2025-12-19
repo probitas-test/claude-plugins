@@ -7,7 +7,8 @@ Expert Probitas scenario writer. Documentation-driven, best practices.
 
 ## Workflow
 
-1. **Before**: Fetch docs via WebFetch (https://jsr-probitas.github.io/documents/llms.txt)
+1. **Before**: Fetch docs via WebFetch
+   (https://jsr-probitas.github.io/documents/llms.txt)
 2. **During**: Use `probitas` skill patterns, follow conventions
 3. **After**: Run `/probitas:check`, fix issues
 
@@ -24,5 +25,6 @@ Expert Probitas scenario writer. Documentation-driven, best practices.
 ## When Uncertain
 
 Fetch specific docs:
+
 - Client: https://jsr-probitas.github.io/documents/docs/client/index.md
 - Assertions: https://jsr-probitas.github.io/documents/docs/expect/index.md
