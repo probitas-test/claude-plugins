@@ -5,74 +5,45 @@ description: Information about Probitas framework. Use when asked "what is Probi
 
 ## What is Probitas?
 
-Probitas is a **scenario-based testing framework**, designed for integration and E2E testing of backend services (APIs, databases, message
-queues).
+Scenario-based E2E testing framework for backend services (APIs, databases,
+message queues).
 
 ## Key Features
 
-| Feature             | Description                                            |
-| ------------------- | ------------------------------------------------------ |
-| Scenario-Based      | Define tests as readable scenarios with steps          |
-| Built-in Clients    | HTTP, gRPC, GraphQL, SQL, Redis, MongoDB, queues       |
-| Fluent Assertions   | Unified `expect()` with type-specific chainable checks |
-| Resource Management | Factory functions with automatic cleanup               |
-| Batteries Included  | faker, FakeTime, spy, stub, outdent re-exported        |
-| Full Type Safety    | Resources fully typed with autocomplete                |
+| Feature           | Description                              |
+| ----------------- | ---------------------------------------- |
+| Scenario-Based    | Tests as readable scenarios with steps   |
+| Built-in Clients  | HTTP, gRPC, GraphQL, SQL, Redis, MongoDB |
+| Fluent Assertions | Unified `expect()` with chainable checks |
+| Auto Cleanup      | Resources with automatic cleanup         |
+| Batteries         | faker, FakeTime, spy, stub included      |
 
-## Example
+## Quick Example
 
 ```typescript
-import { client, expect, faker, scenario } from "jsr:@probitas/probitas";
+import { client, expect, scenario } from "jsr:@probitas/probitas";
 
-export default scenario("User API Integration Test", {
-  tags: ["integration", "http", "postgres"],
-})
-  .resource("user", () => ({
-    id: faker.string.uuid(),
-    name: faker.person.fullName(),
-    email: faker.internet.email(),
-  }))
-  .resource("db", () =>
-    client.sql.postgres.createPostgresClient({
-      url: "postgres://user:pass@localhost:5432/app",
-    }))
+export default scenario("API Test", { tags: ["http"] })
   .resource("http", () =>
     client.http.createHttpClient({
-      url: "http://localhost:8000",
+      url: Deno.env.get("API_URL") ?? "http://localhost:8080",
     }))
-  .setup(async (ctx) => {
-    const { db, user } = ctx.resources;
-    await db.query(
-      `INSERT INTO users (id, name, email) VALUES ($1, $2, $3)`,
-      [user.id, user.name, user.email],
-    );
-    return async () => {
-      await db.query(`DELETE FROM users WHERE id = $1`, [user.id]);
-    };
-  })
-  .step("GET /users/:id - fetch user", async (ctx) => {
-    const { http, user } = ctx.resources;
-    const res = await http.get(`/users/${user.id}`);
-
-    expect(res)
-      .toBeOk()
-      .toHaveStatus(200)
-      .toHaveJsonMatching({ id: user.id, name: user.name });
+  .step("GET /users", async (ctx) => {
+    const res = await ctx.resources.http.get("/users");
+    expect(res).toBeOk().toHaveStatus(200);
   })
   .build();
 ```
 
+## API Reference
+
+Use `deno doc` to look up API:
+
+```bash
+deno doc jsr:@probitas/probitas
+deno doc jsr:@probitas/probitas/client/http
+```
+
 ## Documentation
 
-**IMPORTANT**: Always fetch `llms.txt` first to discover correct URLs.
-
 - LLM sitemap: https://jsr-probitas.github.io/documents/llms.txt
-
-### URL Structure
-
-| Type | Pattern                             | Example                               |
-| ---- | ----------------------------------- | ------------------------------------- |
-| Docs | `/documents/docs/{topic}/index.md`  | `/documents/docs/scenario/index.md`   |
-| API  | `/documents/api/{package}/index.md` | `/documents/api/client-grpc/index.md` |
-
-**DO NOT guess URLs** like `/documents/docs/client/grpc.md` - they don't exist.

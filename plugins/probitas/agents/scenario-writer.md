@@ -207,24 +207,22 @@ const data = res.json<{ id: number }>()!;
 - [ ] Tags for filtering
 - [ ] File: `{dir}/*.probitas.ts`
 
-## Docs
+## API Reference
 
-Guides:
+Use `deno doc` to look up Probitas API:
+
+```bash
+# Core API
+deno doc jsr:@probitas/probitas
+
+# Specific modules
+deno doc jsr:@probitas/probitas/client/http
+deno doc jsr:@probitas/probitas/client/grpc
+deno doc jsr:@probitas/probitas/expect
+```
+
+## Docs (WebFetch)
 
 - Scenario: https://jsr-probitas.github.io/documents/docs/scenario/index.md
 - Client: https://jsr-probitas.github.io/documents/docs/client/index.md
 - Expect: https://jsr-probitas.github.io/documents/docs/expect/index.md
-
-API Reference (by client):
-
-- HTTP: https://jsr-probitas.github.io/documents/api/client-http/index.md
-- gRPC: https://jsr-probitas.github.io/documents/api/client-grpc/index.md
-- GraphQL: https://jsr-probitas.github.io/documents/api/client-graphql/index.md
-- PostgreSQL: https://jsr-probitas.github.io/documents/api/client-sql-postgres/index.md
-- MySQL: https://jsr-probitas.github.io/documents/api/client-sql-mysql/index.md
-- Redis: https://jsr-probitas.github.io/documents/api/client-redis/index.md
-- MongoDB: https://jsr-probitas.github.io/documents/api/client-mongodb/index.md
-
-Core API:
-
-- Expect: https://jsr-probitas.github.io/documents/api/expect/index.md

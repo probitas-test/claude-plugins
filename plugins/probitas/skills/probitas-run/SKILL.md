@@ -5,42 +5,21 @@ description: Running and validating Probitas scenarios. Use when executing tests
 
 ## Instructions
 
-When this skill is triggered:
+Run `/probitas-run` command (or `/probitas-run <selector>` with filter).
 
-1. If project not initialized (no `probitas.jsonc` or `*.probitas.ts`) → trigger `probitas-setup` skill first
-2. **Execute `/probitas-run`** to run scenarios (or `/probitas-run <selector>` with filter)
-3. If tests fail, analyze error messages and suggest fixes
+If project not initialized → run `/probitas-init` first.
 
 ## Selector Examples
 
 ```bash
 probitas run -s tag:api             # Match tag
 probitas run -s "!tag:slow"         # Exclude tag
-probitas run -s "tag:api,!tag:slow" # AND condition
 probitas run -s user                # Match scenario name
 ```
 
-## Validate Before Running
+## If Tests Fail
 
-**Execute `/probitas-check`** for full validation (format, lint, type check).
-
-Or manually:
-
-```bash
-deno check **/*.probitas.ts
-```
-
-## Debugging Failures
-
-```bash
-probitas run --verbose  # Detailed output
-probitas run --debug    # Debug mode
-```
-
-1. Check error message for assertion details
-2. Use `.toHaveJsonMatching()` / `.toHaveDataMatching()` with partial object
-3. Verify environment variables (API_URL, DATABASE_URL, etc.)
-
-## Docs
-
-Fetch via WebFetch: https://jsr-probitas.github.io/documents/docs/scenario/index.md
+1. Run `/probitas-check` for validation errors
+2. Check error messages for assertion details
+3. Verify environment variables (API_URL, DATABASE_URL)
+4. Use `--verbose` or `--debug` for more output
