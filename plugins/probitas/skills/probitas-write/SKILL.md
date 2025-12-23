@@ -5,31 +5,41 @@ description: Writing Probitas scenarios. MUST BE USED when writing/editing E2E t
 
 ## Instructions
 
-**Delegate to the scenario-writer agent:**
+**ALWAYS delegate to the scenario-writer agent using the Task tool.**
 
-> "I'll use the scenario-writer agent to write this test."
+**CRITICAL - Language:**
+- ALWAYS translate user requirements to English before invoking the agent
+- Provide clear, concise English prompts for optimal agent performance
 
-Then describe the test requirements. Claude Code will automatically invoke the
-agent.
+**Steps:**
+1. Translate user requirements to English
+2. Invoke Task tool with `subagent_type: "probitas:scenario-writer"`
+3. Provide English prompt with test requirements
 
 **Example:**
 
+User asks: "ユーザー認証APIのテストを書いて"
+
+Your response:
 ```
-I'll use the scenario-writer agent to write an E2E test for the user
-authentication API that:
-- Tests login with valid credentials
-- Tests login with invalid credentials
+I'll use the probitas:scenario-writer agent to write this Probitas test scenario.
 ```
+
+Then invoke Task tool:
+- `subagent_type`: "probitas:scenario-writer"
+- `prompt`: "Write an E2E test for the user authentication API that:
+  - Tests login with valid credentials (should succeed)
+  - Tests login with invalid credentials (should fail with appropriate error)"
+- `description`: "Write auth test scenario"
 
 ## Workflow
 
 1. If no `probitas.jsonc` → run `/probitas-init` first
-2. Delegate to scenario-writer agent
-3. After completion → run `/probitas-run` to verify
+2. Write scenario (directly or via agent)
+3. After completion → run `/probitas-check` to verify
+4. If needed → run `/probitas-run` to test
 
-## Critical Rules (if writing directly)
-
-Only for small fixes. For new tests, always use the agent.
+## Critical Rules
 
 ### Scenario Structure
 

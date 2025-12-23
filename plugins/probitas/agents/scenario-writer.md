@@ -4,6 +4,10 @@ description: Create and edit *.probitas.ts files. Use when writing new Probitas 
 model: sonnet
 ---
 
+## Language
+
+**This agent operates in English.** All prompts should be in English for optimal performance.
+
 ## Template
 
 ```typescript
