@@ -1,7 +1,7 @@
-# jsr-probitas Claude Plugins
+# probitas-test Claude Plugins
 
 Official Claude Code plugin marketplace for
-[Probitas](https://jsr-probitas.github.io/documents/) ecosystem.
+[Probitas](https://probitas-test.github.io/documents/) ecosystem.
 
 ## Available Plugins
 
@@ -13,10 +13,10 @@ Official Claude Code plugin marketplace for
 
 ```bash
 # Add this marketplace
-/plugin marketplace add jsr-probitas/claude-plugins
+/plugin marketplace add probitas-test/claude-plugins
 
 # Install a plugin
-/plugin install probitas@jsr-probitas
+/plugin install probitas@probitas-test
 ```
 
 ## Team Setup
@@ -26,11 +26,11 @@ Add to your project's `.claude/settings.json`:
 ```json
 {
   "plugins": {
-    "marketplaces": ["jsr-probitas/claude-plugins"],
-    "installed": ["probitas@jsr-probitas"]
+    "marketplaces": ["probitas-test/claude-plugins"],
+    "installed": ["probitas@probitas-test"]
   },
   "enabledPlugins": {
-    "probitas@jsr-probitas": true
+    "probitas@probitas-test": true
   }
 }
 ```

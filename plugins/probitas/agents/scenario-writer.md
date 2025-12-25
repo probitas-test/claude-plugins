@@ -293,6 +293,6 @@ deno doc jsr:@probitas/probitas/expect
 
 ## Docs (WebFetch)
 
-- Scenario: https://jsr-probitas.github.io/documents/docs/scenario/index.md
-- Client: https://jsr-probitas.github.io/documents/docs/client/index.md
-- Expect: https://jsr-probitas.github.io/documents/docs/expect/index.md
+- Scenario: https://probitas-test.github.io/documents/docs/scenario/index.md
+- Client: https://probitas-test.github.io/documents/docs/client/index.md
+- Expect: https://probitas-test.github.io/documents/docs/expect/index.md

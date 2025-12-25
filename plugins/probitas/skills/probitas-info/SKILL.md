@@ -66,4 +66,4 @@ deno doc jsr:@probitas/probitas/client/graphql
 
 ## Documentation
 
-- LLM sitemap: https://jsr-probitas.github.io/documents/llms.txt
+- LLM sitemap: https://probitas-test.github.io/documents/llms.txt

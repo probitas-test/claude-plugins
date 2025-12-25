@@ -1,6 +1,6 @@
 # Probitas Plugin for Claude Code
 
-Integration plugin for [Probitas](https://jsr-probitas.github.io/documents/)
+Integration plugin for [Probitas](https://probitas-test.github.io/documents/)
 scenario testing framework.
 
 ## Features
@@ -29,10 +29,10 @@ scenario testing framework.
 
 ```bash
 # Add marketplace
-/plugin marketplace add jsr-probitas/claude-plugins
+/plugin marketplace add probitas-test/claude-plugins
 
 # Install plugin
-/plugin install probitas@jsr-probitas
+/plugin install probitas@probitas-test
 ```
 
 ## Team Setup
@@ -42,11 +42,11 @@ Add to your project's `.claude/settings.json`:
 ```json
 {
   "plugins": {
-    "marketplaces": ["jsr-probitas/claude-plugins"],
-    "installed": ["probitas@jsr-probitas"]
+    "marketplaces": ["probitas-test/claude-plugins"],
+    "installed": ["probitas@probitas-test"]
   },
   "enabledPlugins": {
-    "probitas@jsr-probitas": true
+    "probitas@probitas-test": true
   }
 }
 ```

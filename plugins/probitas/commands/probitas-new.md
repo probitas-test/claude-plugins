@@ -46,4 +46,4 @@ export default scenario("Database Test", { tags: ["database"] })
 
 ## Docs
 
-https://jsr-probitas.github.io/documents/docs/scenario/index.md
+https://probitas-test.github.io/documents/docs/scenario/index.md
