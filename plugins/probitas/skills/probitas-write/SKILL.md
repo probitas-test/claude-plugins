@@ -8,10 +8,12 @@ description: Writing Probitas scenarios. MUST BE USED when writing/editing E2E t
 **ALWAYS delegate to the scenario-writer agent using the Task tool.**
 
 **CRITICAL - Language:**
+
 - ALWAYS translate user requirements to English before invoking the agent
 - Provide clear, concise English prompts for optimal agent performance
 
 **Steps:**
+
 1. Translate user requirements to English
 2. Invoke Task tool with `subagent_type: "probitas:scenario-writer"`
 3. Provide English prompt with test requirements
@@ -21,11 +23,13 @@ description: Writing Probitas scenarios. MUST BE USED when writing/editing E2E t
 User asks: "ユーザー認証APIのテストを書いて"
 
 Your response:
+
 ```
 I'll use the probitas:scenario-writer agent to write this Probitas test scenario.
 ```
 
 Then invoke Task tool:
+
 - `subagent_type`: "probitas:scenario-writer"
 - `prompt`: "Write an E2E test for the user authentication API that:
   - Tests login with valid credentials (should succeed)

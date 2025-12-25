@@ -35,6 +35,24 @@ export default scenario("API Test", { tags: ["http"] })
   .build();
 ```
 
+## Available Clients
+
+| Client     | Factory Function                             | Use Case             |
+| ---------- | -------------------------------------------- | -------------------- |
+| HTTP       | `client.http.createHttpClient()`             | REST APIs, webhooks  |
+| PostgreSQL | `client.sql.postgres.createPostgresClient()` | PostgreSQL databases |
+| MySQL      | `client.sql.mysql.createMySqlClient()`       | MySQL databases      |
+| SQLite     | `client.sql.sqlite.createSqliteClient()`     | Embedded databases   |
+| DuckDB     | `client.sql.duckdb.createDuckDbClient()`     | Analytics databases  |
+| gRPC       | `client.grpc.createGrpcClient()`             | gRPC services        |
+| ConnectRPC | `client.connectrpc.createConnectRpcClient()` | Connect/gRPC-Web     |
+| GraphQL    | `client.graphql.createGraphqlClient()`       | GraphQL APIs         |
+| Redis      | `client.redis.createRedisClient()`           | Cache, pub/sub       |
+| MongoDB    | `client.mongodb.createMongoClient()`         | Document databases   |
+| Deno KV    | `client.deno_kv.createDenoKvClient()`        | Deno KV store        |
+| RabbitMQ   | `client.rabbitmq.createRabbitMqClient()`     | AMQP message queues  |
+| SQS        | `client.sqs.createSqsClient()`               | AWS message queues   |
+
 ## API Reference
 
 Use `deno doc` to look up API:
@@ -42,6 +60,8 @@ Use `deno doc` to look up API:
 ```bash
 deno doc jsr:@probitas/probitas
 deno doc jsr:@probitas/probitas/client/http
+deno doc jsr:@probitas/probitas/client/grpc
+deno doc jsr:@probitas/probitas/client/graphql
 ```
 
 ## Documentation

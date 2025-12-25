@@ -42,6 +42,67 @@ import { client, expect, scenario, Skip } from "jsr:@probitas/probitas";
 import { faker, FakeTime, spy, stub } from "jsr:@probitas/probitas";
 ```
 
+### Client Selection
+
+**CRITICAL**: Always use the correct factory function from `client.*` namespace.
+
+| Client     | Factory Function                             | Use Case             |
+| ---------- | -------------------------------------------- | -------------------- |
+| HTTP       | `client.http.createHttpClient()`             | REST APIs, webhooks  |
+| PostgreSQL | `client.sql.postgres.createPostgresClient()` | PostgreSQL databases |
+| MySQL      | `client.sql.mysql.createMySqlClient()`       | MySQL databases      |
+| SQLite     | `client.sql.sqlite.createSqliteClient()`     | Embedded databases   |
+| DuckDB     | `client.sql.duckdb.createDuckDbClient()`     | Analytics databases  |
+| gRPC       | `client.grpc.createGrpcClient()`             | gRPC services        |
+| ConnectRPC | `client.connectrpc.createConnectRpcClient()` | Connect/gRPC-Web     |
+| GraphQL    | `client.graphql.createGraphqlClient()`       | GraphQL APIs         |
+| Redis      | `client.redis.createRedisClient()`           | Cache, pub/sub       |
+| MongoDB    | `client.mongodb.createMongoClient()`         | Document databases   |
+| Deno KV    | `client.deno_kv.createDenoKvClient()`        | Deno KV store        |
+| RabbitMQ   | `client.rabbitmq.createRabbitMqClient()`     | AMQP message queues  |
+| SQS        | `client.sqs.createSqsClient()`               | AWS message queues   |
+
+**Examples:**
+
+```typescript
+// HTTP
+.resource("http", () =>
+  client.http.createHttpClient({
+    url: Deno.env.get("API_URL") ?? "http://localhost:8080",
+  }))
+
+// PostgreSQL
+.resource("db", () =>
+  client.sql.postgres.createPostgresClient({
+    url: Deno.env.get("DATABASE_URL") ?? "postgres://user:pass@localhost:5432/db",
+  }))
+
+// Redis
+.resource("cache", () =>
+  client.redis.createRedisClient({
+    url: Deno.env.get("REDIS_URL") ?? "redis://localhost:6379",
+  }))
+
+// gRPC
+.resource("grpc", () =>
+  client.grpc.createGrpcClient({
+    url: Deno.env.get("GRPC_URL") ?? "localhost:50051",
+  }))
+
+// GraphQL
+.resource("graphql", () =>
+  client.graphql.createGraphqlClient({
+    url: Deno.env.get("GRAPHQL_URL") ?? "http://localhost:4000/graphql",
+  }))
+
+// MongoDB
+.resource("mongo", () =>
+  client.mongodb.createMongoClient({
+    url: Deno.env.get("MONGO_URL") ?? "mongodb://localhost:27017",
+    database: "testdb",
+  }))
+```
+
 ### Scenario Structure (CRITICAL)
 
 **Each scenario = steps that DEPEND on each other via `ctx.previous`.**
