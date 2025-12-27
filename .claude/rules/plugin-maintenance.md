@@ -116,24 +116,17 @@ the main context including rules.
 
 ## Agent Invocation
 
-**IMPORTANT**: Custom agents are NOT invoked via the Task tool's `subagent_type`
-parameter. That parameter only accepts built-in agents.
+Custom agents can be invoked in multiple ways:
 
-Custom agents are invoked through:
+1. **Task tool with subagent_type** - Explicitly specify the agent name:
+   ```markdown
+   Task tool: subagent_type="my-agent"
+   ```
+   - For namespaced agents in plugins, use the full name: `subagent_type="plugin-name:agent-name"`
+   - Example: `subagent_type="probitas:scenario-writer"`
 
-1. **Auto-delegation** - Claude automatically invokes based on `description`
-2. **Explicit user request** - "Use the my-agent agent to..."
+2. **Auto-delegation** - Claude automatically invokes based on `description`
 
-**Wrong** (doesn't work):
-
-```markdown
-Task tool: subagent_type="my-agent"
-```
-
-**Correct** (in skills or instructions):
-
-```markdown
-Use the my-agent agent to [describe task]
-```
+3. **Explicit user request** - "Use the my-agent agent to..."
 
 To verify available agents: `/agents` command.
