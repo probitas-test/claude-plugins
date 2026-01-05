@@ -1,5 +1,6 @@
 ---
 description: Generate scenario template (http, database, grpc, graphql)
+model: haiku
 ---
 
 ## Workflow

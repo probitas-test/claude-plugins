@@ -77,31 +77,14 @@ import { faker, FakeTime, spy, stub } from "jsr:@probitas/probitas";
     url: Deno.env.get("DATABASE_URL") ?? "postgres://user:pass@localhost:5432/db",
   }))
 
-// Redis
-.resource("cache", () =>
-  client.redis.createRedisClient({
-    url: Deno.env.get("REDIS_URL") ?? "redis://localhost:6379",
-  }))
-
-// gRPC
-.resource("grpc", () =>
-  client.grpc.createGrpcClient({
-    url: Deno.env.get("GRPC_URL") ?? "localhost:50051",
-  }))
-
 // GraphQL
 .resource("graphql", () =>
   client.graphql.createGraphqlClient({
     url: Deno.env.get("GRAPHQL_URL") ?? "http://localhost:4000/graphql",
   }))
-
-// MongoDB
-.resource("mongo", () =>
-  client.mongodb.createMongoClient({
-    url: Deno.env.get("MONGO_URL") ?? "mongodb://localhost:27017",
-    database: "testdb",
-  }))
 ```
+
+Follow the same pattern for other clients using the factory functions from the table above.
 
 ### Scenario Structure (CRITICAL)
 
@@ -150,6 +133,47 @@ Available in `.resource()`, `.setup()`, `.step()`:
 ### Assertions - CRITICAL
 
 **NEVER use `if/throw` or manual checks. ALWAYS use `expect()` assertions.**
+
+**MANDATORY PROCESS - BEFORE writing ANY assertion:**
+
+1. **Identify the response type** and corresponding Expectation interface:
+   - HTTP → `HttpResponseExpectation`
+   - GraphQL → `GraphqlResponseExpectation`
+   - gRPC → `GrpcResponseExpectation`
+   - ConnectRPC → `ConnectRpcResponseExpectation`
+   - SQL → `SqlQueryResultExpectation`
+   - Redis → `RedisExpectation` (or `RedisGetResultExpectation`, `RedisSetResultExpectation`, etc.)
+   - MongoDB → `MongoExpectation` (or `MongoFindResultExpectation`, `MongoInsertOneResultExpectation`, etc.)
+   - RabbitMQ → `RabbitMqExpectation` (or `RabbitMqPublishResultExpectation`, `RabbitMqConsumeResultExpectation`, etc.)
+   - SQS → `SqsExpectation` (or `SqsSendResultExpectation`, `SqsReceiveResultExpectation`, etc.)
+   - Deno KV → `DenoKvExpectation` (or `DenoKvGetResultExpectation`, `DenoKvSetResultExpectation`, etc.)
+
+2. **Use `/probitas:probitas-expect-methods` command to get ACTUAL available methods** for that specific interface:
+   ```bash
+   # Example for HTTP:
+   /probitas:probitas-expect-methods HttpResponseExpectation
+
+   # Example for SQL:
+   /probitas:probitas-expect-methods SqlQueryResultExpectation
+
+   # Example for MongoDB find:
+   /probitas:probitas-expect-methods MongoFindResultExpectation
+
+   # Example for RabbitMQ publish:
+   /probitas:probitas-expect-methods RabbitMqPublishResultExpectation
+   ```
+   - The command will output a clean list of method names: `toBeOk`, `toHaveStatus`, etc.
+   - Read the list and choose the most appropriate method for your assertion
+   - This always reflects the current Probitas version's API
+
+3. **Choose the appropriate expect method** based on the actual API - DO NOT improvise with `if/throw`
+
+**Why using `/probitas:probitas-expect-methods` is mandatory:**
+
+- Always reflects the current Probitas version (no outdated documentation)
+- Covers ALL client types including RabbitMQ, SQS, Deno KV
+- Shows operation-specific methods (e.g., `MongoFindResultExpectation` vs `MongoInsertOneResultExpectation`)
+- Eliminates guesswork - you see the actual available methods before writing code
 
 ```typescript
 // ❌ FORBIDDEN - if/throw for status check
@@ -223,76 +247,32 @@ expect(res).not.toHaveDataProperty("Metadata.x-internal-token");  // Chain it!
 - DO NOT guess method signatures or options
 - If unsure, fetch the specific API docs from links below
 
-### Common Mistakes to Avoid
+### Common Mistakes
 
 ```typescript
 // ❌ Missing export default / .build()
 const s = scenario("Test").step(() => {});
-// ✅ CORRECT
-export default scenario("Test").step(() => {}).build();
+// ✅ export default scenario("Test").step(() => {}).build();
 
-// ❌ Hardcoded URL
+// ❌ Hardcoded URLs
 client.http.createHttpClient({ url: "http://localhost:8080" });
-// ✅ CORRECT
+// ✅ Use env vars with fallback
 client.http.createHttpClient({
   url: Deno.env.get("API_URL") ?? "http://localhost:8080",
 });
 
-// ❌ Missing cleanup in setup
-.setup(async (ctx) => {
-  await ctx.resources.db.query("INSERT...");
-})
-// ✅ CORRECT - return cleanup function
-.setup(async (ctx) => {
-  await ctx.resources.db.query("INSERT...");
-  return async () => {
-    await ctx.resources.db.query("DELETE...");
-  };
-})
-
-// ❌ Old syntax (deprecated)
-const data = res.json<{ id: number }>()!;
-// ✅ CORRECT - json is now a property returning any
-const data = res.json as { id: number } | null;
+// ❌ json is a property, not a method
+const data = res.json<T>()!;
+// ✅ Type assertion on property
+const data = res.json as T | null;
 ```
-
-### Best Practices
-
-- Descriptive step names ("Create user" not "Step 1")
-- Return data for `ctx.previous`
-- Use tags for filtering (`{ tags: ["api", "slow"] }`)
-- One responsibility per step
-- Use `.setup()` with cleanup for fixtures
-- Register clients as `.resource()` for auto-cleanup
-- Use `toHaveJsonMatching()` / `toHaveDataMatching()` for partial matching
 
 ## Checklist
 
 - [ ] `export default` + `.build()`
-- [ ] Resources via `.resource()`
-- [ ] Setup returns cleanup function
-- [ ] Env vars for URLs
-- [ ] Fluent assertions with `expect()` - NO manual checks
-- [ ] Use `.not` for negative assertions
-- [ ] Tags for filtering
-- [ ] File: `{dir}/*.probitas.ts`
-
-## API Reference
-
-Use `deno doc` to look up Probitas API:
-
-```bash
-# Core API
-deno doc jsr:@probitas/probitas
-
-# Specific modules
-deno doc jsr:@probitas/probitas/client/http
-deno doc jsr:@probitas/probitas/client/grpc
-deno doc jsr:@probitas/probitas/expect
-```
-
-## Docs (WebFetch)
-
-- Scenario: https://probitas-test.github.io/documents/docs/scenario/index.md
-- Client: https://probitas-test.github.io/documents/docs/client/index.md
-- Expect: https://probitas-test.github.io/documents/docs/expect/index.md
+- [ ] Env vars for URLs (e.g., `Deno.env.get("API_URL")`)
+- [ ] Use `/probitas:probitas-expect-methods` to find correct expect methods
+- [ ] Fluent assertions with `expect()` - NO `if/throw`
+- [ ] Independent tests → separate scenarios
+- [ ] Descriptive step names
+- [ ] File: `*.probitas.ts`

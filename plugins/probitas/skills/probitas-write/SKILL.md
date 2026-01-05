@@ -38,46 +38,10 @@ Then invoke Task tool:
 
 ## Workflow
 
-1. If no `probitas.jsonc` → run `/probitas-init` first
-2. Write scenario (directly or via agent)
-3. After completion → run `/probitas-check` to verify
-4. If needed → run `/probitas-run` to test
+1. If no `probitas.jsonc` → run `/probitas:probitas-init` first
+2. Invoke `probitas:scenario-writer` agent with English prompt
+3. Agent will use `/probitas:probitas-expect-methods InterfaceName` to find correct expect methods before writing assertions
+4. After completion → run `/probitas:probitas-check` to verify
+5. If needed → run `/probitas:probitas-run` to test
 
-## Critical Rules
-
-### Scenario Structure
-
-**Independent steps → separate scenarios**
-
-```typescript
-// ❌ BAD
-scenario("Tests")
-  .step("A", ...) // no ctx.previous
-  .step("B", ...) // no ctx.previous
-  .build();
-
-// ✅ GOOD
-export default [
-  scenario("A").step(...).build(),
-  scenario("B").step(...).build(),
-];
-```
-
-### Assertions
-
-**NO `if/throw`. Use `expect()` only.**
-
-```typescript
-// ❌ FORBIDDEN
-if (res.statusCode !== 0) throw new Error("Failed");
-
-// ✅ CORRECT
-expect(res).toBeOk().toHaveDataMatching({ statusCode: 0 });
-```
-
-### Checklist
-
-- [ ] `export default` + `.build()`
-- [ ] Env vars for URLs
-- [ ] `expect()` only - NO `if/throw`
-- [ ] Independent tests → separate scenarios
+**Note:** All coding rules and assertion guidelines are defined in the scenario-writer agent itself.

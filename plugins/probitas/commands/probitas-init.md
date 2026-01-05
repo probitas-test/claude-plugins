@@ -1,5 +1,6 @@
 ---
 description: Initialize a Probitas project
+model: haiku
 ---
 
 ```bash
