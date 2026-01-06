@@ -40,6 +40,7 @@ export default scenario("API Test", { tags: ["http"] })
 | Client     | Factory Function                             | Use Case             |
 | ---------- | -------------------------------------------- | -------------------- |
 | HTTP       | `client.http.createHttpClient()`             | REST APIs, webhooks  |
+| HTTP OIDC  | `client.http.oidc.createOidcHttpClient()`    | OAuth 2.0/OIDC APIs  |
 | PostgreSQL | `client.sql.postgres.createPostgresClient()` | PostgreSQL databases |
 | MySQL      | `client.sql.mysql.createMySqlClient()`       | MySQL databases      |
 | SQLite     | `client.sql.sqlite.createSqliteClient()`     | Embedded databases   |
@@ -58,10 +59,25 @@ export default scenario("API Test", { tags: ["http"] })
 Use `deno doc` to look up API:
 
 ```bash
+# Core module
 deno doc jsr:@probitas/probitas
+
+# Client modules (use pattern: jsr:@probitas/probitas/client/<name>)
 deno doc jsr:@probitas/probitas/client/http
+deno doc jsr:@probitas/probitas/client/http/oidc
 deno doc jsr:@probitas/probitas/client/grpc
+deno doc jsr:@probitas/probitas/client/connectrpc
 deno doc jsr:@probitas/probitas/client/graphql
+deno doc jsr:@probitas/probitas/client/redis
+deno doc jsr:@probitas/probitas/client/mongodb
+deno doc jsr:@probitas/probitas/client/rabbitmq
+deno doc jsr:@probitas/probitas/client/sqs
+deno doc jsr:@probitas/probitas/client/deno_kv
+deno doc jsr:@probitas/probitas/client/sql        # Common SQL types
+deno doc jsr:@probitas/probitas/client/sql/postgres
+deno doc jsr:@probitas/probitas/client/sql/mysql
+deno doc jsr:@probitas/probitas/client/sql/sqlite
+deno doc jsr:@probitas/probitas/client/sql/duckdb
 ```
 
 ## Documentation

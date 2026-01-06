@@ -18,8 +18,9 @@ scenario testing framework.
 | -------------------------- | ----------------------------- |
 | `/probitas-init`           | Initialize a Probitas project |
 | `/probitas-run [selector]` | Run scenarios                 |
-| `/probitas-new <type>`     | Generate scenario template    |
+| `/probitas-list`           | List available scenarios      |
 | `/probitas-check`          | Run format, lint, type check  |
+| `/probitas-expect-methods` | Get available expect methods  |
 
 ### Agents
 

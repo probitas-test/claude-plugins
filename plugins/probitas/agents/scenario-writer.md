@@ -49,6 +49,7 @@ import { faker, FakeTime, spy, stub } from "jsr:@probitas/probitas";
 | Client     | Factory Function                             | Use Case             |
 | ---------- | -------------------------------------------- | -------------------- |
 | HTTP       | `client.http.createHttpClient()`             | REST APIs, webhooks  |
+| HTTP OIDC  | `client.http.oidc.createOidcHttpClient()`    | OAuth 2.0/OIDC APIs  |
 | PostgreSQL | `client.sql.postgres.createPostgresClient()` | PostgreSQL databases |
 | MySQL      | `client.sql.mysql.createMySqlClient()`       | MySQL databases      |
 | SQLite     | `client.sql.sqlite.createSqliteClient()`     | Embedded databases   |
@@ -69,6 +70,16 @@ import { faker, FakeTime, spy, stub } from "jsr:@probitas/probitas";
 .resource("http", () =>
   client.http.createHttpClient({
     url: Deno.env.get("API_URL") ?? "http://localhost:8080",
+  }))
+
+// HTTP with OIDC authentication
+.resource("http", () =>
+  client.http.oidc.createOidcHttpClient({
+    url: Deno.env.get("API_URL") ?? "http://localhost:8080",
+    oidc: {
+      issuer: Deno.env.get("OIDC_ISSUER") ?? "http://localhost:8080",
+      clientId: "test-client",
+    },
   }))
 
 // PostgreSQL
