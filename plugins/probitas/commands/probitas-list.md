@@ -78,4 +78,4 @@ Use `--json` for machine-readable output.
 
 ## Documentation
 
-https://probitas-test.github.io/documents/
+https://probitas-test.github.io/

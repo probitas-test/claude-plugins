@@ -20,6 +20,6 @@ probitas run -s user                # Match scenario name
 ```
 
 If `probitas` command not found, fetch installation instructions from:
-https://probitas-test.github.io/documents/docs/installation/index.md
+https://probitas-test.github.io/docs/installation/index.md
 
 If failures occur, explain cause and suggest fixes.

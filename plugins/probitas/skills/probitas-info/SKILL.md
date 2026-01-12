@@ -82,4 +82,4 @@ deno doc jsr:@probitas/probitas/client/sql/duckdb
 
 ## Documentation
 
-- LLM sitemap: https://probitas-test.github.io/documents/llms.txt
+- LLM sitemap: https://probitas-test.github.io/llms.txt

@@ -1,7 +1,7 @@
 # probitas-test Claude Plugins
 
 Official Claude Code plugin marketplace for
-[Probitas](https://probitas-test.github.io/documents/) ecosystem.
+[Probitas](https://probitas-test.github.io/) ecosystem.
 
 ## Available Plugins
 

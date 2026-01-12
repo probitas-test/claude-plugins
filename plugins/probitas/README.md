@@ -1,6 +1,6 @@
 # Probitas Plugin for Claude Code
 
-Integration plugin for [Probitas](https://probitas-test.github.io/documents/)
+Integration plugin for [Probitas](https://probitas-test.github.io/)
 scenario testing framework.
 
 ## Features
