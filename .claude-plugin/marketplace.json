@@ -1,4 +1,5 @@
 {
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "probitas-test",
   "owner": {
     "name": "probitas-test"
@@ -8,7 +9,9 @@
     {
       "name": "probitas",
       "source": "./plugins/probitas",
-      "description": "Probitas scenario testing framework integration"
+      "description": "Probitas scenario testing framework integration",
+      "category": "testing",
+      "homepage": "https://probitas-test.github.io/documents/"
     }
   ]
 }
