@@ -1,6 +1,7 @@
 ---
 name: probitas-write
 description: Writing Probitas scenarios. MUST BE USED when writing/editing E2E tests, creating scenarios, or working with *.probitas.ts files.
+allowed-tools: Agent
 ---
 
 ## Instructions

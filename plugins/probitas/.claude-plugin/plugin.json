@@ -4,14 +4,6 @@
   "description": "Probitas scenario testing framework integration for Claude Code",
   "author": {
     "name": "probitas-test",
-    "url": "https://github.com/probitas-test"
-  },
-  "repository": "https://github.com/probitas-test/claude-plugins",
-  "keywords": [
-    "testing",
-    "integration-testing",
-    "scenario",
-    "deno"
-  ],
-  "license": "MIT"
+    "email": "lambdalisue+probitas@gmail.com"
+  }
 }

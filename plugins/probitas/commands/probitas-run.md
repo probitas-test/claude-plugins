@@ -1,5 +1,7 @@
 ---
 description: Run scenarios with optional selector
+allowed-tools: Bash, Read
+argument-hint: "[selector]"
 ---
 
 ```bash

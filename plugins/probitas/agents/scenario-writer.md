@@ -2,6 +2,7 @@
 name: scenario-writer
 description: Create and edit *.probitas.ts files. Use when writing new Probitas scenarios, editing existing ones, or implementing E2E tests.
 model: sonnet
+tools: Read, Edit, Write, Glob, Grep, Bash
 ---
 
 ## Language

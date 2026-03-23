@@ -1,5 +1,6 @@
 ---
 description: Run format, lint, and type check for scenarios
+allowed-tools: Bash, Read, Edit
 ---
 
 ## Workflow

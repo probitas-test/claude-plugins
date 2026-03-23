@@ -1,6 +1,8 @@
 ---
 description: Get available expect methods for a specific Expectation interface
 model: haiku
+allowed-tools: Bash
+argument-hint: "<InterfaceName>"
 ---
 
 ## Usage

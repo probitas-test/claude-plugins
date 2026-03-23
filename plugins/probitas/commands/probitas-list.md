@@ -1,6 +1,8 @@
 ---
 description: List available scenarios with filtering
 model: haiku
+allowed-tools: Bash
+argument-hint: "[directory]"
 ---
 
 ## Usage

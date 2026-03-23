@@ -1,6 +1,7 @@
 ---
 description: Initialize a Probitas project
 model: haiku
+allowed-tools: Bash, Read
 ---
 
 ```bash
