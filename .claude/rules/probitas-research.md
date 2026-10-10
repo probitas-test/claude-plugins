@@ -12,7 +12,7 @@ Check `plugins/probitas/` for existing documentation:
   - `probitas-write`: Scenario writing conventions
   - `probitas-run`: Execution patterns
 - **Commands** (`commands/*.md`): CLI usage patterns
-  - `probitas-init`, `probitas-new`, `probitas-run`, etc.
+  - `probitas-init`, `probitas-run`, `probitas-check`, etc.
 - **Agents** (`agents/*.md`): Specialized workflows
   - `scenario-writer`: Scenario generation patterns
 
@@ -26,13 +26,13 @@ If plugin resources don't cover the question:
 
 ## 3. API Reference
 
-For detailed API information:
+For detailed API information (Probitas 2.x no longer needs Deno, so do not
+reach for `deno doc`):
 
-```bash
-deno doc jsr:@probitas/probitas
-deno doc jsr:@probitas/probitas/client/http
-deno doc jsr:@probitas/probitas/client/[client-name]
-```
+- JSR API reference: https://jsr.io/@probitas/probitas/doc, with subpaths
+  such as `/doc/client/http` or `/doc/client/[client-name]`
+- Type declarations of the npm package `@probitas-test/probitas` (`dist/**/*.d.ts`)
+  and of `@probitas-test/expect` for expectation interfaces
 
 ## Anti-Patterns
 
@@ -46,18 +46,18 @@ deno doc jsr:@probitas/probitas/client/[client-name]
 
 - Reference plugin skills for quick answers
 - Fetch official docs for detailed explanations
-- Use `deno doc` for precise API signatures
+- Use the JSR API reference or type declarations for precise API signatures
 
 ## Examples
 
-| Question                         | First Action                                         |
-| -------------------------------- | ---------------------------------------------------- |
-| "What is Probitas?"              | Reference `probitas-info` skill                      |
-| "How to write scenarios?"        | Reference `probitas-write` skill                     |
-| "Available clients?"             | Check `probitas-info` client table                   |
-| "GraphQL client API?"            | Run `deno doc jsr:@probitas/probitas/client/graphql` |
-| "Advanced scenario patterns?"    | WebFetch LLM sitemap section                         |
-| "How to initialize new project?" | Reference `probitas-init` command                    |
+| Question                         | First Action                                              |
+| -------------------------------- | --------------------------------------------------------- |
+| "What is Probitas?"              | Reference `probitas-info` skill                           |
+| "How to write scenarios?"        | Reference `probitas-write` skill                          |
+| "Available clients?"             | Check `probitas-info` client table                        |
+| "GraphQL client API?"            | Read https://jsr.io/@probitas/probitas/doc/client/graphql |
+| "Advanced scenario patterns?"    | WebFetch LLM sitemap section                              |
+| "How to initialize new project?" | Reference `probitas-init` command                         |
 
 ## Rationale
 
