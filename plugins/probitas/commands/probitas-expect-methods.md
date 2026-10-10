@@ -24,15 +24,34 @@ argument-hint: "<InterfaceName>"
 ## Parameters
 
 - **Interface name** (required): The Expectation interface name to query
-  - Common interfaces: `HttpResponseExpectation`, `GraphqlResponseExpectation`, `SqlQueryResultExpectation`, `RedisExpectation`, `MongoFindResultExpectation`, `RabbitMqPublishResultExpectation`, `SqsSendResultExpectation`, `DenoKvGetResultExpectation`
+  - Common interfaces: `HttpResponseExpectation`, `GraphqlResponseExpectation`, `GrpcResponseExpectation`, `ConnectRpcResponseExpectation`, `SqlQueryResultExpectation`, `RedisGetResultExpectation`, `MongoFindResultExpectation`, `RabbitMqPublishResultExpectation`, `SqsSendResultExpectation`, `AnythingExpectation` (plain values)
 
 ## Implementation
 
-Run the following command with the provided interface name:
+The expectation interfaces are declared in the `@probitas-test/expect` npm
+package, a dependency of `@probitas-test/probitas`.
 
-```bash
-deno doc --json jsr:@probitas/expect 2>/dev/null | jq -r '.nodes[] | select(.name == "INTERFACE_NAME") | .interfaceDef.methods[] | .name'
-```
+1. **Installed project** - Search the type declarations under the project's
+   `node_modules` (present after installing the `package.json` that
+   `probitas init` writes):
+
+   ```bash
+   find . -path '*/node_modules/@probitas-test/expect/dist/*' -name '*.d.ts' -not -path '*/_vendor/*' \
+     -exec perl -ne 'if (/^export interface INTERFACE_NAME\b/) { $in = 1; next } if ($in && /^}/) { $in = 0; next } print "$1\n" if $in && /^    (\w+)[(<]/ && !$seen{$1}++' {} +
+   ```
+
+2. **Nothing installed** - If step 1 prints nothing because no
+   `@probitas-test/expect` is installed, download the published package and run
+   the same search on it:
+
+   ```bash
+   dir="${TMPDIR:-/tmp}/probitas-expect/node_modules/@probitas-test/expect"
+   mkdir -p "$dir"
+   curl -fsSL "$(curl -fsSL https://registry.npmjs.org/@probitas-test/expect/latest | jq -r .dist.tarball)" \
+     | tar xz -C "$dir" --strip-components=1
+   find "${TMPDIR:-/tmp}/probitas-expect" -path '*/node_modules/@probitas-test/expect/dist/*' -name '*.d.ts' -not -path '*/_vendor/*' \
+     -exec perl -ne 'if (/^export interface INTERFACE_NAME\b/) { $in = 1; next } if ($in && /^}/) { $in = 0; next } print "$1\n" if $in && /^    (\w+)[(<]/ && !$seen{$1}++' {} +
+   ```
 
 Replace `INTERFACE_NAME` with the interface name provided by the user.
 
@@ -43,7 +62,7 @@ A clean list of method names available for that interface:
 ```
 toBeOk
 toHaveStatus
-toHaveStatusText
+toHaveStatusEqual
 toHaveJson
 toHaveJsonMatching
 toHaveJsonProperty
@@ -53,5 +72,5 @@ toHaveJsonProperty
 ## Notes
 
 - Use this command BEFORE writing assertions to find the most appropriate expect method
-- The output reflects the actual current API from the installed Probitas version
-- For result types with multiple operation-specific expectations (MongoDB, RabbitMQ, SQS, Deno KV), use the specific interface name (e.g., `MongoFindResultExpectation`, not just `MongoExpectation`)
+- The installed package reflects the Probitas version pinned by the project; the download fallback reflects the latest release
+- For result types with multiple operation-specific expectations (Redis, MongoDB, RabbitMQ, SQS), use the specific interface name (e.g., `MongoFindResultExpectation`, not `MongoExpectation`, which is a conditional type without methods of its own)

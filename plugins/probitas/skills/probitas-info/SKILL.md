@@ -6,27 +6,29 @@ description: Information about Probitas framework. Use when asked "what is Probi
 ## What is Probitas?
 
 Scenario-based E2E testing framework for backend services (APIs, databases,
-message queues).
+message queues). It ships as a single `probitas` binary (built on Bun); no
+other runtime is needed to run scenarios.
 
 ## Key Features
 
-| Feature           | Description                              |
-| ----------------- | ---------------------------------------- |
-| Scenario-Based    | Tests as readable scenarios with steps   |
-| Built-in Clients  | HTTP, gRPC, GraphQL, SQL, Redis, MongoDB |
-| Fluent Assertions | Unified `expect()` with chainable checks |
-| Auto Cleanup      | Resources with automatic cleanup         |
-| Batteries         | faker, FakeTime, spy, stub included      |
+| Feature           | Description                                         |
+| ----------------- | --------------------------------------------------- |
+| Scenario-Based    | Tests as readable scenarios with steps              |
+| Built-in Clients  | HTTP, gRPC, GraphQL, SQL, Redis, MongoDB, queues    |
+| Fluent Assertions | Unified `expect()` with chainable checks            |
+| Auto Cleanup      | Resources with automatic cleanup                    |
+| Batteries         | faker, FakeTime, spy, stub included                 |
+| Single Binary     | `run`, `list`, `init`, `fmt`, `lint`, `check` built |
 
 ## Quick Example
 
 ```typescript
-import { client, expect, scenario } from "jsr:@probitas/probitas";
+import { client, expect, scenario } from "@probitas-test/probitas";
 
 export default scenario("API Test", { tags: ["http"] })
   .resource("http", () =>
     client.http.createHttpClient({
-      url: Deno.env.get("API_URL") ?? "http://localhost:8080",
+      url: process.env.API_URL ?? "http://localhost:8080",
     }))
   .step("GET /users", async (ctx) => {
     const res = await ctx.resources.http.get("/users");
@@ -50,35 +52,28 @@ export default scenario("API Test", { tags: ["http"] })
 | GraphQL    | `client.graphql.createGraphqlClient()`       | GraphQL APIs         |
 | Redis      | `client.redis.createRedisClient()`           | Cache, pub/sub       |
 | MongoDB    | `client.mongodb.createMongoClient()`         | Document databases   |
-| Deno KV    | `client.deno_kv.createDenoKvClient()`        | Deno KV store        |
 | RabbitMQ   | `client.rabbitmq.createRabbitMqClient()`     | AMQP message queues  |
 | SQS        | `client.sqs.createSqsClient()`               | AWS message queues   |
 
+The DuckDB native binding is downloaded on first use; run
+`probitas cache duckdb` ahead of time for CI images or offline machines.
+
 ## API Reference
 
-Use `deno doc` to look up API:
+The library is published to npm as `@probitas-test/probitas` (and to JSR as
+`@probitas/probitas`). Read the type declarations, which carry the JSDoc:
 
-```bash
-# Core module
-deno doc jsr:@probitas/probitas
+- In a project set up by `probitas init` (after installing its `package.json`):
+  `node_modules/@probitas-test/probitas/dist/**/*.d.ts`, and the expectation
+  interfaces in `node_modules/@probitas-test/expect/dist/**/*.d.ts`
+- Online: https://jsr.io/@probitas/probitas/doc (subpaths such as
+  `/doc/client/http`, `/doc/client/sql/postgres`, `/doc/expect`)
 
-# Client modules (use pattern: jsr:@probitas/probitas/client/<name>)
-deno doc jsr:@probitas/probitas/client/http
-deno doc jsr:@probitas/probitas/client/http/oidc
-deno doc jsr:@probitas/probitas/client/grpc
-deno doc jsr:@probitas/probitas/client/connectrpc
-deno doc jsr:@probitas/probitas/client/graphql
-deno doc jsr:@probitas/probitas/client/redis
-deno doc jsr:@probitas/probitas/client/mongodb
-deno doc jsr:@probitas/probitas/client/rabbitmq
-deno doc jsr:@probitas/probitas/client/sqs
-deno doc jsr:@probitas/probitas/client/deno_kv
-deno doc jsr:@probitas/probitas/client/sql        # Common SQL types
-deno doc jsr:@probitas/probitas/client/sql/postgres
-deno doc jsr:@probitas/probitas/client/sql/mysql
-deno doc jsr:@probitas/probitas/client/sql/sqlite
-deno doc jsr:@probitas/probitas/client/sql/duckdb
-```
+## Migrating from 1.x
+
+Probitas 1.x ran on Deno. See
+https://github.com/probitas-test/probitas/blob/main/MIGRATION.md for the
+changes (imports, `Deno.*` APIs, removed Deno KV client, commands).
 
 ## Documentation
 

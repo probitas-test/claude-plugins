@@ -12,13 +12,13 @@ tools: Read, Edit, Write, Glob, Grep, Bash
 ## Template
 
 ```typescript
-import { client, expect, scenario } from "jsr:@probitas/probitas";
-import { faker } from "jsr:@probitas/probitas"; // if needed
+import { client, expect, scenario } from "@probitas-test/probitas";
+import { faker } from "@probitas-test/probitas"; // if needed
 
 export default scenario("Test name", { tags: ["..."] })
   .resource("http", () =>
     client.http.createHttpClient({
-      url: Deno.env.get("API_URL") ?? "http://localhost:8080",
+      url: process.env.API_URL ?? "http://localhost:8080",
     }))
   .step("Step name", async (ctx) => {
     const res = await ctx.resources.http.post("/endpoint", { body: {} });
@@ -32,16 +32,40 @@ export default scenario("Test name", { tags: ["..."] })
 
 1. Write scenario following template above
 2. Run `/probitas-check`, fix lint/type issues
-3. If unsure, fetch specific API docs from links below
+3. If unsure, read the API docs listed under "API Docs" below
 
 ## Coding Rules
 
 ### Import
 
 ```typescript
-import { client, expect, scenario, Skip } from "jsr:@probitas/probitas";
-import { faker, FakeTime, spy, stub } from "jsr:@probitas/probitas";
+import { client, expect, scenario, Skip } from "@probitas-test/probitas";
+import { faker, FakeTime, spy, stub } from "@probitas-test/probitas";
 ```
+
+- Import Probitas from `@probitas-test/probitas`, never `jsr:@probitas/probitas`
+  (the 1.x specifier still runs but does not type-check).
+- Other modules must be installed with a package manager next to the scenarios
+  (`package.json`) and imported by bare name (`import ms from "ms"`). `npm:` and
+  `jsr:` specifiers are NOT resolved.
+
+### Runtime APIs
+
+Scenarios run on Bun inside the `probitas` binary. The `Deno` global does NOT
+exist; use the Node.js equivalents:
+
+| Need                 | Use                                              |
+| -------------------- | ------------------------------------------------ |
+| Environment variable | `process.env.API_URL`                            |
+| Read a file          | `readFile(path, "utf8")` from `node:fs/promises` |
+| Run a command        | `execFile` / `spawn` from `node:child_process`   |
+| TCP connection       | `createConnection({ port })` from `node:net`     |
+| Current directory    | `process.cwd()`                                  |
+
+These type-check only with the Node.js types: the project's `package.json`
+needs `@types/node` in `devDependencies` and `tsconfig.json` needs
+`"types": ["node"]` in `compilerOptions`. If `/probitas-check` reports
+`process` as unknown, add both (`probitas init` in 2.0.0 does not).
 
 ### Client Selection
 
@@ -60,7 +84,6 @@ import { faker, FakeTime, spy, stub } from "jsr:@probitas/probitas";
 | GraphQL    | `client.graphql.createGraphqlClient()`       | GraphQL APIs         |
 | Redis      | `client.redis.createRedisClient()`           | Cache, pub/sub       |
 | MongoDB    | `client.mongodb.createMongoClient()`         | Document databases   |
-| Deno KV    | `client.deno_kv.createDenoKvClient()`        | Deno KV store        |
 | RabbitMQ   | `client.rabbitmq.createRabbitMqClient()`     | AMQP message queues  |
 | SQS        | `client.sqs.createSqsClient()`               | AWS message queues   |
 
@@ -70,15 +93,15 @@ import { faker, FakeTime, spy, stub } from "jsr:@probitas/probitas";
 // HTTP
 .resource("http", () =>
   client.http.createHttpClient({
-    url: Deno.env.get("API_URL") ?? "http://localhost:8080",
+    url: process.env.API_URL ?? "http://localhost:8080",
   }))
 
 // HTTP with OIDC authentication
 .resource("http", () =>
   client.http.oidc.createOidcHttpClient({
-    url: Deno.env.get("API_URL") ?? "http://localhost:8080",
+    url: process.env.API_URL ?? "http://localhost:8080",
     oidc: {
-      issuer: Deno.env.get("OIDC_ISSUER") ?? "http://localhost:8080",
+      issuer: process.env.OIDC_ISSUER ?? "http://localhost:8080",
       clientId: "test-client",
     },
   }))
@@ -86,13 +109,13 @@ import { faker, FakeTime, spy, stub } from "jsr:@probitas/probitas";
 // PostgreSQL
 .resource("db", () =>
   client.sql.postgres.createPostgresClient({
-    url: Deno.env.get("DATABASE_URL") ?? "postgres://user:pass@localhost:5432/db",
+    url: process.env.DATABASE_URL ?? "postgres://user:pass@localhost:5432/db",
   }))
 
 // GraphQL
 .resource("graphql", () =>
   client.graphql.createGraphqlClient({
-    url: Deno.env.get("GRAPHQL_URL") ?? "http://localhost:4000/graphql",
+    url: process.env.GRAPHQL_URL ?? "http://localhost:4000/graphql",
   }))
 ```
 
@@ -154,11 +177,11 @@ Available in `.resource()`, `.setup()`, `.step()`:
    - gRPC → `GrpcResponseExpectation`
    - ConnectRPC → `ConnectRpcResponseExpectation`
    - SQL → `SqlQueryResultExpectation`
-   - Redis → `RedisExpectation` (or `RedisGetResultExpectation`, `RedisSetResultExpectation`, etc.)
-   - MongoDB → `MongoExpectation` (or `MongoFindResultExpectation`, `MongoInsertOneResultExpectation`, etc.)
-   - RabbitMQ → `RabbitMqExpectation` (or `RabbitMqPublishResultExpectation`, `RabbitMqConsumeResultExpectation`, etc.)
-   - SQS → `SqsExpectation` (or `SqsSendResultExpectation`, `SqsReceiveResultExpectation`, etc.)
-   - Deno KV → `DenoKvExpectation` (or `DenoKvGetResultExpectation`, `DenoKvSetResultExpectation`, etc.)
+   - Redis → operation-specific: `RedisGetResultExpectation`, `RedisSetResultExpectation`, `RedisCountResultExpectation`, etc.
+   - MongoDB → operation-specific: `MongoFindResultExpectation`, `MongoInsertOneResultExpectation`, etc.
+   - RabbitMQ → operation-specific: `RabbitMqPublishResultExpectation`, `RabbitMqConsumeResultExpectation`, etc.
+   - SQS → operation-specific: `SqsSendResultExpectation`, `SqsReceiveResultExpectation`, etc.
+   - Plain values (numbers, strings, objects) → `AnythingExpectation`
 
 2. **Use `/probitas:probitas-expect-methods` command to get ACTUAL available methods** for that specific interface:
    ```bash
@@ -183,7 +206,7 @@ Available in `.resource()`, `.setup()`, `.step()`:
 **Why using `/probitas:probitas-expect-methods` is mandatory:**
 
 - Always reflects the current Probitas version (no outdated documentation)
-- Covers ALL client types including RabbitMQ, SQS, Deno KV
+- Covers ALL client types including RabbitMQ, SQS
 - Shows operation-specific methods (e.g., `MongoFindResultExpectation` vs `MongoInsertOneResultExpectation`)
 - Eliminates guesswork - you see the actual available methods before writing code
 
@@ -257,7 +280,7 @@ expect(res).not.toHaveDataProperty("Metadata.x-internal-token");  // Chain it!
 
 - DO NOT assume array index syntax unless documented
 - DO NOT guess method signatures or options
-- If unsure, fetch the specific API docs from links below
+- If unsure, read the API docs listed under "API Docs" below
 
 ### Common Mistakes
 
@@ -270,7 +293,7 @@ const s = scenario("Test").step(() => {});
 client.http.createHttpClient({ url: "http://localhost:8080" });
 // ✅ Use env vars with fallback
 client.http.createHttpClient({
-  url: Deno.env.get("API_URL") ?? "http://localhost:8080",
+  url: process.env.API_URL ?? "http://localhost:8080",
 });
 
 // ❌ json is a property, not a method
@@ -279,10 +302,21 @@ const data = res.json<T>()!;
 const data = res.json as T | null;
 ```
 
+## API Docs
+
+- Type declarations (JSDoc included), when the project's `package.json` is
+  installed: `node_modules/@probitas-test/probitas/dist/**/*.d.ts` and
+  `node_modules/@probitas-test/expect/dist/**/*.d.ts`
+- JSR API reference: https://jsr.io/@probitas/probitas/doc (e.g.
+  `/doc/client/http`, `/doc/expect`)
+- LLM sitemap: https://probitas-test.github.io/llms.txt
+
 ## Checklist
 
 - [ ] `export default` + `.build()`
-- [ ] Env vars for URLs (e.g., `Deno.env.get("API_URL")`)
+- [ ] Import from `@probitas-test/probitas` (no `jsr:` / `npm:` specifiers)
+- [ ] No `Deno.*` APIs - use Node.js equivalents
+- [ ] Env vars for URLs (e.g., `process.env.API_URL`)
 - [ ] Use `/probitas:probitas-expect-methods` to find correct expect methods
 - [ ] Fluent assertions with `expect()` - NO `if/throw`
 - [ ] Independent tests → separate scenarios
