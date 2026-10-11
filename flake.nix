@@ -3,32 +3,57 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
-    flake-utils.url = "github:numtide/flake-utils";
     probitas-flake.url = "github:probitas-test/probitas";
     probitas-flake.inputs.nixpkgs.follows = "nixpkgs";
-    probitas-flake.inputs.flake-utils.follows = "flake-utils";
   };
 
-  outputs = { self, nixpkgs, flake-utils, probitas-flake }:
-    flake-utils.lib.eachDefaultSystem (system:
-      let
-        pkgs = import nixpkgs {
+  outputs =
+    {
+      self,
+      nixpkgs,
+      probitas-flake,
+    }:
+    let
+      systems = [
+        "x86_64-linux"
+        "aarch64-linux"
+        "x86_64-darwin"
+        "aarch64-darwin"
+      ];
+      forAllSystems = f: nixpkgs.lib.genAttrs systems (system: f system);
+      pkgsFor =
+        system:
+        import nixpkgs {
           inherit system;
           overlays = [ probitas-flake.overlays.default ];
         };
-      in {
-        packages.default = pkgs.probitas;
+    in
+    {
+      devShells = forAllSystems (
+        system:
+        let
+          pkgs = pkgsFor system;
+        in
+        {
+          default = pkgs.mkShell {
+            packages = [
+              # Formats the Markdown and JSON of the plugins.
+              pkgs.deno
+              # Lets the plugin's commands be tried against real scenarios.
+              pkgs.probitas
+              # Checks that the plugin manifests parse.
+              pkgs.jq
+              pkgs.just
+              pkgs.nixfmt
+            ];
 
-        devShells.default = pkgs.mkShell {
-          packages = with pkgs; [
-            deno
-            pagefind
-            probitas
-          ];
+            shellHook = ''
+              export DENO_NO_UPDATE_CHECK=1
+            '';
+          };
+        }
+      );
 
-          shellHook = ''
-            export DENO_NO_UPDATE_CHECK=1
-          '';
-        };
-      });
+      formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.nixfmt);
+    };
 }
