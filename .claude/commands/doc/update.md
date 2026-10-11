@@ -8,18 +8,17 @@ description: Sync plugin content with latest Probitas documentation
 
    Use WebFetch to get the latest docs:
 
-   - https://probitas-test.github.io/documents/llms.txt
-   - https://probitas-test.github.io/documents/docs/scenario/index.md
-   - https://probitas-test.github.io/documents/docs/client/index.md
-   - https://probitas-test.github.io/documents/docs/expect/index.md
-   - https://probitas-test.github.io/documents/docs/configuration/index.md
+   - https://probitas-test.github.io/llms.txt
+   - https://probitas-test.github.io/docs/scenario/index.md
+   - https://probitas-test.github.io/docs/client/index.md
+   - https://probitas-test.github.io/docs/expect/index.md
+   - https://probitas-test.github.io/docs/configuration/index.md
 
 2. **Review and update plugin files**
 
    Compare fetched docs with current plugin content:
 
-   - `plugins/probitas/rules/*.md` - Conventions and guidelines
-   - `plugins/probitas/skills/probitas/SKILL.md` - Patterns and quick reference
+   - `plugins/probitas/skills/*/SKILL.md` - Patterns and quick reference
    - `plugins/probitas/commands/*.md` - Slash command definitions
    - `plugins/probitas/agents/*.md` - Agent definitions
 
