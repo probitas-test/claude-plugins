@@ -5,5 +5,8 @@
   "author": {
     "name": "probitas-test",
     "email": "lambdalisue+probitas@gmail.com"
-  }
+  },
+  "homepage": "https://github.com/probitas-test/claude-plugins",
+  "repository": "https://github.com/probitas-test/claude-plugins",
+  "license": "MIT"
 }

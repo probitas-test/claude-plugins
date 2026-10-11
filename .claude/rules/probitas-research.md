@@ -20,7 +20,7 @@ Check `plugins/probitas/` for existing documentation:
 
 If plugin resources don't cover the question:
 
-- **LLM Sitemap**: https://probitas-test.github.io/documents/llms.txt
+- **LLM Sitemap**: https://probitas-test.github.io/llms.txt
   - Comprehensive documentation optimized for AI consumption
   - Use WebFetch to retrieve specific sections
 

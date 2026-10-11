@@ -11,7 +11,7 @@
       "source": "./plugins/probitas",
       "description": "Probitas scenario testing framework integration",
       "category": "testing",
-      "homepage": "https://probitas-test.github.io/documents/"
+      "homepage": "https://probitas-test.github.io/"
     }
   ]
 }

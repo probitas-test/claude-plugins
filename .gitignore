@@ -1,2 +1,6 @@
 .DS_Store
 .coverage
+/.envrc
+.direnv/
+result
+/.claude/worktrees/
