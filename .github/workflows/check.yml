@@ -6,16 +6,37 @@ on:
   pull_request:
     branches: [main]
 
+# A pull request only needs its latest commit checked. A run on main waits
+# for the one before it instead of cancelling it, so each one finishes and
+# saves the caches that pull requests start from.
+concurrency:
+  group: check-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: read
+
 jobs:
-  fmt:
-    name: Format
+  ci:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-
-      - uses: denoland/setup-deno@v2
+      - uses: actions/checkout@v7
         with:
-          deno-version: v2.x
-
-      - name: Check formatting
-        run: deno fmt --check
+          persist-credentials: false
+      - uses: cachix/install-nix-action@v31
+        with:
+          extra_nix_config: |
+            experimental-features = nix-command flakes
+      # The store the development shell comes from. Only an exact match is
+      # restored, and only main saves, so pull requests cannot evict the
+      # caches each other start from.
+      - uses: nix-community/cache-nix-action@v7
+        with:
+          primary-key: nix-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('flake.nix', 'flake.lock') }}
+          save: ${{ github.ref == 'refs/heads/main' }}
+      # Load the development shell (flake.nix) into the job.
+      - uses: nicknovitski/nix-develop@v1
+      # The same gate as local development (justfile).
+      - run: just ci
+        env:
+          CI: "1"
